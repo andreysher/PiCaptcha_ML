@@ -46,6 +46,9 @@ class PiCaptchaModel:
 
         return category_name
 
+    def get_all_class_names(self):
+        return sorted(list(self.category_mapper.values()))
+
 
 model = PiCaptchaModel()
 
@@ -58,7 +61,12 @@ async def get_picture_class(request):
     return web.Response(text=json.dumps(response))
 
 
+async def get_all_classes(request):
+    response = model.get_all_class_names()
+    return web.Response(text=json.dumps(response))
+
 app = web.Application()
 app.router.add_get('/api/image_classifier', get_picture_class)
+app.router.add_get('/api/classes', get_all_classes)
 
 web.run_app(app, host='127.0.0.1', port=5000)
